@@ -5,7 +5,8 @@ Mosaheh, Arabic for corrector, is a ruby lib which can repair UTF-8 Arabic (U+06
 
 Usage
 -----
-
+    
+    # encoding: UTF-8
     require 'mosaheh'
 
     encoder = Mosaheh::Encoder.new
