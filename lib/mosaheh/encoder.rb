@@ -8,12 +8,25 @@ class Mosaheh::Encoder
   # U+0600 to U+06FF encoded using cp1252 
   BROKEN_AR = 'Ø€_*_Ø_*_Ø‚_*_Øƒ_*_Ø„_*_Ø…_*_Ø†_*_Ø‡_*_Øˆ_*_Ø‰_*_ØŠ_*_Ø‹_*_ØŒ_*_Ø_*_ØŽ_*_Ø_*_Ø_*_Ø‘_*_Ø’_*_Ø“_*_Ø”_*_Ø•_*_Ø–_*_Ø—_*_Ø˜_*_Ø™_*_Øš_*_Ø›_*_Øœ_*_Ø_*_Øž_*_ØŸ_*_Ø _*_Ø¡_*_Ø¢_*_Ø£_*_Ø¤_*_Ø¥_*_Ø¦_*_Ø§_*_Ø¨_*_Ø©_*_Øª_*_Ø«_*_Ø¬_*_Ø­_*_Ø®_*_Ø¯_*_Ø°_*_Ø±_*_Ø²_*_Ø³_*_Ø´_*_Øµ_*_Ø¶_*_Ø·_*_Ø¸_*_Ø¹_*_Øº_*_Ø»_*_Ø¼_*_Ø½_*_Ø¾_*_Ø¿_*_Ù€_*_Ù_*_Ù‚_*_Ùƒ_*_Ù„_*_Ù…_*_Ù†_*_Ù‡_*_Ùˆ_*_Ù‰_*_ÙŠ_*_Ù‹_*_ÙŒ_*_Ù_*_ÙŽ_*_Ù_*_Ù_*_Ù‘_*_Ù’_*_Ù“_*_Ù”_*_Ù•_*_Ù–_*_Ù—_*_Ù˜_*_Ù™_*_Ùš_*_Ù›_*_Ùœ_*_Ù_*_Ùž_*_ÙŸ_*_Ù _*_Ù¡_*_Ù¢_*_Ù£_*_Ù¤_*_Ù¥_*_Ù¦_*_Ù§_*_Ù¨_*_Ù©_*_Ùª_*_Ù«_*_Ù¬_*_Ù­_*_Ù®_*_Ù¯_*_Ù°_*_Ù±_*_Ù²_*_Ù³_*_Ù´_*_Ùµ_*_Ù¶_*_Ù·_*_Ù¸_*_Ù¹_*_Ùº_*_Ù»_*_Ù¼_*_Ù½_*_Ù¾_*_Ù¿_*_Ú€_*_Ú_*_Ú‚_*_Úƒ_*_Ú„_*_Ú…_*_Ú†_*_Ú‡_*_Úˆ_*_Ú‰_*_ÚŠ_*_Ú‹_*_ÚŒ_*_Ú_*_ÚŽ_*_Ú_*_Ú_*_Ú‘_*_Ú’_*_Ú“_*_Ú”_*_Ú•_*_Ú–_*_Ú—_*_Ú˜_*_Ú™_*_Úš_*_Ú›_*_Úœ_*_Ú_*_Úž_*_ÚŸ_*_Ú _*_Ú¡_*_Ú¢_*_Ú£_*_Ú¤_*_Ú¥_*_Ú¦_*_Ú§_*_Ú¨_*_Ú©_*_Úª_*_Ú«_*_Ú¬_*_Ú­_*_Ú®_*_Ú¯_*_Ú°_*_Ú±_*_Ú²_*_Ú³_*_Ú´_*_Úµ_*_Ú¶_*_Ú·_*_Ú¸_*_Ú¹_*_Úº_*_Ú»_*_Ú¼_*_Ú½_*_Ú¾_*_Ú¿_*_Û€_*_Û_*_Û‚_*_Ûƒ_*_Û„_*_Û…_*_Û†_*_Û‡_*_Ûˆ_*_Û‰_*_ÛŠ_*_Û‹_*_ÛŒ_*_Û_*_ÛŽ_*_Û_*_Û_*_Û‘_*_Û’_*_Û“_*_Û”_*_Û•_*_Û–_*_Û—_*_Û˜_*_Û™_*_Ûš_*_Û›_*_Ûœ_*_Û_*_Ûž_*_ÛŸ_*_Û _*_Û¡_*_Û¢_*_Û£_*_Û¤_*_Û¥_*_Û¦_*_Û§_*_Û¨_*_Û©_*_Ûª_*_Û«_*_Û¬_*_Û­_*_Û®_*_Û¯_*_Û°_*_Û±_*_Û²_*_Û³_*_Û´_*_Ûµ_*_Û¶_*_Û·_*_Û¸_*_Û¹_*_Ûº_*_Û»_*_Û¼_*_Û½_*_Û¾_*_Û¿'
 
+  # Initialize the encoder.
+  #
+  # @param [Hash] options The options for the new encoder instance
+  # @option options [Symbol] :replace_char The charecter used to replace
+  #   unknown charecters while trying to repair a text
   def initialize options = {}
     @replace_char = options[:replace_char] || '?'
 
     generate_mappings_hash
   end
 
+  # Outputs the mappings hash in a human-readble way
+  #
+  # @example
+  #   ...
+  #   [195, 153, 32]            => [217, 160] # ٠
+  #   [195, 152, 194, 167]      => [216, 167] # ا
+  #   [195, 154, 226, 128, 158] => [218, 132] # ڄ
+  #   #   ...
   def show_mappings_hash
     i = 0
     justification = 0;
@@ -39,6 +52,11 @@ class Mosaheh::Encoder
     puts mappings
   end
 
+  # Tries to repair an Arabic string which hasn't been
+  # encoded correctly
+  #
+  # @param [String] str The broken text
+  # @return [String] The repaired text
   def repair(str)
     @broken = str.unpack('C*')
     @repaired = []
@@ -63,6 +81,16 @@ class Mosaheh::Encoder
 
 private
   
+  # Generates a mapping hash containing sequences of bytes as key-value pairs.
+  # The keys in the generated hash are the broken sequences and the values
+  # are the correct ones. 
+  # 
+  # @example
+  #   {
+  #      [195, 152, 226, 130, 172]=>[216, 128],
+  #      [195, 152, 194, 129]=>[216, 129],
+  #      ...
+  #   }
   def generate_mappings_hash
     @map = {}
     ar = AR.split('_*_')
@@ -72,6 +100,10 @@ private
     end
   end
   
+  # Tries to search the mappings hash for the broken sequence.
+  #
+  # @note As can be seen in the mappings hash, each broken sequence 
+  #   can consistof 2 to 5 bytes.
   def sequence_found_in_map
     (1..4).each do |i|
       broken_seq = @broken[0..i]
@@ -84,6 +116,7 @@ private
     false
   end
 
+  # Handles the case when the byte is not broken 
   def byte_not_broken
     if ( 
         @broken.first != 195 && # The byte is not the beginning of a broken sequence
@@ -97,6 +130,8 @@ private
     end
   end
 
+  # This is the last resort. It tires to figure out the best
+  # way to handle an unknown byte
   def handle_unknown_byte
     case
     # Handle the case when the last 2 bytes are the beginning of
