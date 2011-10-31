@@ -14,7 +14,7 @@ class Mosaheh::Encoder
   # @option options [Symbol] :replace_char The charecter used to replace
   #   unknown charecters while trying to repair a text
   def initialize options = {}
-    @replace_char = options[:replace_char] || '?'
+    @replace_char_seq = (options[:replace_char] || '?').bytes.to_a
 
     generate_mappings_hash
   end
@@ -133,6 +133,6 @@ private
   # languages.
   def handle_unknown_byte
     @broken.shift
-    @repaired += @replace_char.bytes.to_a
+    @repaired += @replace_char_seq
   end
 end
