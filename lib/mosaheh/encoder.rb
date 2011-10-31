@@ -69,7 +69,7 @@ class Mosaheh::Encoder
 
       # Try to handle ASCII chars if they are not a part
       # of a broken sequence
-      next if byte_not_broken
+      next if byte_is_ascci
 
       handle_unknown_byte
     end
@@ -104,6 +104,7 @@ private
   #
   # @note As can be seen in the mappings hash, each broken sequence 
   #   can consistof 2 to 5 bytes.
+  # @return [Boolean] A broken sequence is found or not
   def sequence_found_in_map
     (1..4).each do |i|
       broken_seq = @broken[0..i]
@@ -116,38 +117,22 @@ private
     false
   end
 
-  # Handles the case when the byte is not broken 
-  def byte_not_broken
-    if ( 
-        @broken.first != 195 && # The byte is not the beginning of a broken sequence
-        @broken.first <  256    # One byte char
-       ) || (
-        @broken.first == 195 &&          # The byte is the beginning of a sequence ...
-        !(152..155).include?(@broken[1]) # ... but the next one is not, so it's not a sequence! 
-       )
-      # Add the byte to the repaired sequence and remove it from the broken one
+  # Handles ASCII chars in the byte sequence
+  #
+  # @return [Number, nil] An ASCII byte is found or not 
+  def byte_is_ascci
+    if ( @broken.first < 128 )
       @repaired << @broken.shift 
     end
   end
 
-  # This is the last resort. It tires to figure out the best
-  # way to handle an unknown byte
+  # Here we only replace the unkown byte with the repace_char.
+  # The reason for this is that the encoder assumes the UTF-8 data
+  # was encoded with a single-byte encoding, specifically latin1 (cp1252).
+  # We only know the Arabic result of this conversion, but not for the rest of the
+  # languages.
   def handle_unknown_byte
-    case
-    # Handle the case when the last 2 bytes are the beginning of
-    # a broken sequence but it's not found in the mappings hash.
-    # The best guess is that they're 2 one-byte chars.
-    # 
-    # Handles: [195, (152 | 153 | 154 | 155)]
-    when @broken.length == 2
-      @repaired << @broken.first << @broken[1]
-      @broken.slice!(0, 2)
-
-    # If we are here, then we have no idea what is this byte!
-    # We will just use the replace_char to replace the unknown byte_not_broken
-    # in the repaired sequence
-    else
-      @repaired += @replace_char.bytes.to_a
-    end
+    @broken.shift
+    @repaired += @replace_char.bytes.to_a
   end
 end
