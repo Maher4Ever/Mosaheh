@@ -101,9 +101,9 @@ private
     case
     # Handle the case when the last 2 bytes are the beginning of
     # a broken sequence but it's not found in the mappings hash.
-    # The best guess is that they're 2 ASCII chars.
+    # The best guess is that they're 2 one-byte chars.
     # 
-    # Handles: [195, *152..155]
+    # Handles: [195, (152 | 153 | 154 | 155)]
     when @broken.length == 2
       @repaired << @broken.first << @broken[1]
       @broken.slice!(0, 2)
