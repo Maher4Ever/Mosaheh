@@ -13,5 +13,10 @@ describe Mosaheh::Encoder do
       text = [*0..127].map(&:chr).join
       encoder.repair(text).should == text
     end
+
+    it 'should replace unknown byte-sequences with the replace_char' do
+      text = [*128..255].shuffle.pack('C*')
+      encoder.repair(text).should == ('?' * (255-128+1))
+    end
   end
 end
