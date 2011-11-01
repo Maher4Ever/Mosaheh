@@ -67,6 +67,9 @@ class Mosaheh::Encoder
       # next sequence if we succeed
       next if sequence_found_in_map
 
+      # Try to handle Arabic chars which are correctly encoded
+      next if sequence_is_arabic
+
       # Try to handle ASCII chars if they are not a part
       # of a broken sequence
       next if byte_is_ascci
@@ -115,6 +118,23 @@ private
       end
     end
     false
+  end
+
+  # Tries to find correctly UTF-8 encoded Arabic chars
+  # in the broken sequence. We assume that the broken
+  # data is latin1 encoded, but there is no harm in 
+  # handling mixed data. 
+  #
+  # @note This will only catch Arabic UTF-8 chars, other
+  #   UTF-8 chars will be considered unknown
+  # @return [
+  def sequence_is_arabic
+    byte_seq = @broken[0..1]
+    
+    if @map.has_value? byte_seq
+      @repaired += byte_seq
+      @broken.slice!(0, 2)
+    end
   end
 
   # Handles ASCII chars in the byte sequence

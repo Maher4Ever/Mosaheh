@@ -14,9 +14,14 @@ describe Mosaheh::Encoder do
       encoder.repair(text).should == text
     end
 
+    it 'should not change correctly encoded Arabic chars' do
+      text = 'إختبار'
+      encoder.repair(text).should == text
+    end
+
     it 'should replace unknown byte-sequences with the replace_char' do
-      text = [*128..255].shuffle.pack('C*')
-      encoder.repair(text).should == ('?' * (255-128+1))
+      text = [*128..210].shuffle.pack('C*')
+      encoder.repair(text).should == ('?' * (210-128+1))
     end
   end
 end
