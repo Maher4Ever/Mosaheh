@@ -6,7 +6,7 @@ describe Mosaheh::Encoder do
 
   describe '#repair' do
     it 'should repair the whole Arabic unicode codeblock' do
-      encoder.repair(Mosaheh::Encoder::BROKEN_AR).unpack('C*').should eq Mosaheh::Encoder::AR.unpack('C*')
+      encoder.repair(Mosaheh::Encoder::BROKEN_AR).should == Mosaheh::Encoder::AR
     end
 
     it 'should not change ASCII chars' do
