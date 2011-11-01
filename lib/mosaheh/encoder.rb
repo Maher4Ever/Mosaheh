@@ -127,7 +127,7 @@ private
   #
   # @note This will only catch Arabic UTF-8 chars, other
   #   UTF-8 chars will be considered unknown
-  # @return [
+  # @return [Array, nil] The bytes-sequence of an arabic char or nil
   def sequence_is_arabic
     byte_seq = @broken[0..1]
     
