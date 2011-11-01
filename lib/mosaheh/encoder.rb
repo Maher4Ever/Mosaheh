@@ -76,7 +76,7 @@ class Mosaheh::Encoder
 
     result = @repaired.pack('C*')
     @repaired = []
-    result
+    result.force_encoding('utf-8')
   end
 
 private
