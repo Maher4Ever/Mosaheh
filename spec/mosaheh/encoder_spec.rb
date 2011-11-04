@@ -7,8 +7,8 @@ describe Mosaheh::Encoder do
   describe '#repair' do
     it 'should repair the whole Arabic unicode codeblock' do
       # Arabic: U+0060 - U+06FF
-      good_ar = (0..255).map{|i| eval '"\u06' + ("%02x" %  i) + '"'}.join
-      broken_ar = load_misencoded_sample('ar.txt').gsub('_*_', '')
+      good_ar = (0..255).map{|i| eval '"\u06' + ("%02x" %  i) + '"'}.join ' '
+      broken_ar = load_misencoded_ar
       encoder.repair(broken_ar).should == good_ar
     end
 

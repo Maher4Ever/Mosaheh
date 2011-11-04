@@ -11,3 +11,7 @@ require 'mosaheh'
 def load_misencoded_sample(filename)
   File.read("#{File.dirname(__FILE__)}/misencoded_samples/#{filename}").chomp
 end
+
+def load_misencoded_ar
+  load_misencoded_sample('ar.txt')
+end
