@@ -6,7 +6,9 @@ describe Mosaheh::Encoder do
 
   describe '#repair' do
     it 'should repair the whole Arabic unicode codeblock' do
-      encoder.repair(Mosaheh::Encoder::BROKEN_AR).should == Mosaheh::Encoder::AR
+      good_ar = (0..255).map{|i| eval '"\u06' + ("%02x" %  i) + '"'}.join
+      broken_ar = load_misencoded_sample('ar.txt').gsub('_*_', '')
+      encoder.repair(broken_ar).should == good_ar
     end
 
     it 'should not change ASCII chars' do
