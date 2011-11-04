@@ -25,10 +25,6 @@ class Mosaheh::Encoder
 
       state = ec.primitive_convert(source, dest, nil, nil, Encoding::Converter::AFTER_OUTPUT)
 
-      if state == :invalid_byte_sequence
-        p [dest, *ec.primitive_errinfo]
-      end
-
       if state == :undefined_conversion 
         c = ec.last_error.error_char.unpack('C*')[1].chr
         dest += c.force_encoding('cp1252')
