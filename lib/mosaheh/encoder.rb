@@ -40,7 +40,7 @@ class Mosaheh::Encoder
         dest += c.force_encoding('cp1252')
       end
 
-      if state == :after_output && dest =~ /[#{@utf_8_beginning_chars}]#{@problem_char}$/
+      if state == :after_output && dest =~ %r{[#{@utf_8_beginning_chars}]#{@problem_char}$}
         dest.gsub!(/#{@problem_char}$/, @correct_char)
       end
     end
