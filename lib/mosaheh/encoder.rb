@@ -19,8 +19,8 @@ class Mosaheh::Encoder
   # which has been misencoded from cp1252 to UTF-8
   # although the original data was UTF-8 encoded
   #
-  # @param [String] misencoded string
-  # @return [String] correctly encoded utf-8 string
+  # @param [String] Misencoded string
+  # @return [String] Correctly encoded utf-8 string
   def repair(str)
     
     source, dest = str.clone, ""
