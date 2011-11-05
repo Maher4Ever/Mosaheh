@@ -52,7 +52,9 @@ class Mosaheh::Encoder
         fixed += c.force_encoding('cp1252')
       end
 
-      if state == :after_output && fixed =~ %r{[#{@utf_8_beginning_chars}]#{@problem_char}$}
+      # After each byte gets converted, check for the problem charecter
+      # and replace it if it's found
+      if state == :after_output && ends_with_problem?(fixed)
         fixed.gsub!(/#{@problem_char}$/, @correct_char)
       end
     end
@@ -70,4 +72,12 @@ private
     str =~ %r{([\u0600-\u06FF])+}u
   end
 
+  # Used to check for the problem char in the end
+  # of a given String
+  #
+  # @param [String] Data to test
+  # @return [Boolean] 
+  def ends_with_problem?(str)
+    str =~ %r{[#{@utf_8_beginning_chars}]#{@problem_char}$}
+  end
 end
