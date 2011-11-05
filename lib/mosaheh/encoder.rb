@@ -35,7 +35,7 @@ class Mosaheh::Encoder
       # Don't process correctly UTF-8 
       # encoded Arabic data
       if is_arabic?(source[0])
-        fixed += source.shift!
+        fixed += source.shift!.force_encoding('cp1252')
         next
       end
 
