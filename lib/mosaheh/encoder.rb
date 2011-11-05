@@ -23,8 +23,13 @@ class Mosaheh::Encoder
   # @return [String] Correctly encoded utf-8 string
   def repair(str)
     
-    source, dest = str.clone, ""
-    ec = Encoding::Converter.new('utf-8', 'cp1252')
+    # Data buffers
+    source = str.clone
+    fixed  = ""
+    
+    # Each string needs a new converter instance
+    ec  = Encoding::Converter.new('utf-8', 'cp1252')
+    
     until source.empty?
 
       if source[0] =~ %r{([\u0600-\u06FF])+}u
