@@ -32,7 +32,9 @@ class Mosaheh::Encoder
     
     until source.empty?
 
-      if source[0] =~ %r{([\u0600-\u06FF])+}u
+      # Don't process correctly UTF-8 
+      # encoded Arabic data
+      if is_arabic?(source[0])
         fixed += source[0]
         source[0] = ''
         next
@@ -51,6 +53,12 @@ class Mosaheh::Encoder
     end
 
     fixed.force_encoding('utf-8')
+  end
+
+private
+  
+  def is_arabic?(str)
+    str =~ %r{([\u0600-\u06FF])+}u
   end
 
 end
