@@ -33,24 +33,24 @@ class Mosaheh::Encoder
     until source.empty?
 
       if source[0] =~ %r{([\u0600-\u06FF])+}u
-        dest += source[0]
+        fixed += source[0]
         source[0] = ''
         next
       end
 
-      state = ec.primitive_convert(source, dest, nil, nil, Encoding::Converter::AFTER_OUTPUT)
+      state = ec.primitive_convert(source, fixed, nil, nil, Encoding::Converter::AFTER_OUTPUT)
 
       if state == :undefined_conversion 
         c = ec.last_error.error_char.unpack('C*')[1].chr
-        dest += c.force_encoding('cp1252')
+        fixed += c.force_encoding('cp1252')
       end
 
-      if state == :after_output && dest =~ %r{[#{@utf_8_beginning_chars}]#{@problem_char}$}
-        dest.gsub!(/#{@problem_char}$/, @correct_char)
+      if state == :after_output && fixed =~ %r{[#{@utf_8_beginning_chars}]#{@problem_char}$}
+        fixed.gsub!(/#{@problem_char}$/, @correct_char)
       end
     end
 
-    dest.force_encoding('utf-8')
+    fixed.force_encoding('utf-8')
   end
 
 end
