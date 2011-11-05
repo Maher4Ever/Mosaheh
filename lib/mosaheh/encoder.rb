@@ -42,6 +42,12 @@ class Mosaheh::Encoder
 
       state = ec.primitive_convert(source, fixed, nil, nil, Encoding::Converter::AFTER_OUTPUT)
 
+      # When an undefined sequence is found, we only move the
+      # 2nd byte to the fixed data, as it will be valid in UTF-8.
+      # For example: 129 is undefined in cp1252, but it is in UTF-8.
+      #   If we get a sequence like:
+      #   ec.last_error.error_char.unpack('C*') # => [194, 129]
+      #   We just ignore the 194 and add the 129 to the fixed data
       if state == :undefined_conversion 
         c = ec.last_error.error_char.unpack('C*')[1].chr
         fixed += c.force_encoding('cp1252')
@@ -57,6 +63,10 @@ class Mosaheh::Encoder
 
 private
   
+  # Used to test for correctly encoded UTF-8 Arabic
+  # 
+  # @param [String] Data to test
+  # @return [Boolean] 
   def is_arabic?(str)
     str =~ %r{([\u0600-\u06FF])+}u
   end
